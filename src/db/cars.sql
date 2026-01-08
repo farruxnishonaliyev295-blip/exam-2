@@ -59,28 +59,3 @@ INSERT INTO payments (amount, orderId) VALUES
 (9300, 2),
 
 (18000, 3);
-
-
-SELECT
-  o.id AS order_id,
-  o.count_month,
-  o.start_date,
-  o.end_date,
-  json_build_object(
-    'id', c.id,
-    'name', c.name,
-    'password', c.password,
-    'contact', c.contact
-  ) AS customer,
-  json_build_object(
-    'id', car.id,
-    'name', car.car_name,
-    'price', car.price
-  ) AS car,
-  COALESCE(SUM(p.amount), 0) AS total_paid
-FROM orders o
-JOIN customers c ON c.id = o.customersid
-JOIN cars car ON car.id = o.carsid
-LEFT JOIN payments p ON p.orderid = o.id
-WHERE c.id = 2
-GROUP BY o.id, c.id, car.id, car.car_name, car.price;
